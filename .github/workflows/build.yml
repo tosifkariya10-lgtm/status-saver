@@ -1,0 +1,23 @@
+name: Build AAB Free
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Unzip Project
+        run: unzip -o "status-saver-hd---caption-maker-FIXED.zip" -d.
+      - name: Build AAB
+        run: |
+          chmod +x gradlew
+         ./gradlew bundleRelease
+      - name: Upload AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-aab
+          path: app/build/outputs/bundle/release/app-release.aab
